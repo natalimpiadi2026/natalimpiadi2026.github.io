@@ -18,7 +18,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Figtree:wght@400;500;600;700&family=Great+Vibes&display=swap">
 <style>
 :root {
   /* Layout: testata con titolo grande e conto alla rovescia; sotto, modulo (sticky) a sinistra ed elenco delle serate a destra, una sola colonna sotto 880px. Ghirlanda di luci in cima, neve leggera sullo sfondo. */
@@ -47,6 +47,7 @@
   --alone-verde: rgba(63, 148, 103, 0.5);
   --chiarore: #FFFFFF;
   --ombra: 0 1px 2px rgba(21, 52, 42, 0.05), 0 18px 40px -20px rgba(21, 52, 42, 0.28);
+  --f-corsivo: "Great Vibes", "Snell Roundhand", "Apple Chancery", cursive;
   --f-titolo: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
   --f-testo: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
   --raggio: 16px;
@@ -151,15 +152,16 @@ body {
 .occhiello svg { color: var(--oro); flex: none; }
 .titolo {
   margin: 0;
-  font-family: var(--f-titolo);
-  font-weight: 500;
-  font-size: clamp(3.3rem, 11.5vw, 8.4rem);
-  line-height: 0.92;
-  letter-spacing: -0.025em;
+  padding-left: 0.04em;
+  font-family: var(--f-corsivo);
+  font-weight: 400;
+  font-size: clamp(4rem, 14vw, 9.8rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  word-spacing: 0.16em;
   text-wrap: balance;
-  font-optical-sizing: auto;
 }
-.titolo em { font-style: italic; font-weight: 400; color: var(--mirtillo); letter-spacing: -0.01em; }
+.titolo em { font-style: normal; color: var(--mirtillo); }
 .sottotitolo {
   margin: 22px 0 0;
   font-size: clamp(1.08rem, 2.1vw, 1.4rem);
