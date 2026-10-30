@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Natalimpiadi – Seconda Edizione</title>
 <meta name="description" content="Il conto alla rovescia per la seconda edizione delle Natalimpiadi: sabato 26 dicembre 2026, ore 21:00.">
-<meta name="theme-color" content="#f6f8f6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0b1814" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f8f6">
 <meta name="apple-mobile-web-app-title" content="Natalimpiadi">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Natalimpiadi – Seconda Edizione">
@@ -31,7 +30,7 @@ body { margin: 0; }
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Outfit:wght@200;300;600&display=swap">
 <style>
-/* Layout: colonna allineata a sinistra, molto spazio vuoto. Il conto alla rovescia è l'unico elemento grande; una pallina rossa pende dal bordo in alto. */
+/* Layout: tema sempre chiaro, colonna allineata a sinistra, molto spazio vuoto. Il conto alla rovescia è l'unico elemento grande; una pallina rossa pende dal bordo in alto. */
 :root {
   --paper: #f6f8f6;
   --ink: #10291f;
@@ -47,38 +46,7 @@ body { margin: 0; }
   --pattern-alpha: 0.06;
   --font-display: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0b1814;
-    --ink: #edf2ee;
-    --muted: #8ea299;
-    --line: #20332c;
-    --holly: #e0545b;
-    --thread: #43594f;
-    --gold: #e2b54a;
-    --leaf: #63c08a;
-    --light-blue: #6aa6ec;
-    --light-yellow: #f2c64f;
-    --light-green: #57bd82;
-    --pattern-alpha: 0.07;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #0b1814;
-  --ink: #edf2ee;
-  --muted: #8ea299;
-  --line: #20332c;
-  --holly: #e0545b;
-  --thread: #43594f;
-  --gold: #e2b54a;
-  --leaf: #63c08a;
-  --light-blue: #6aa6ec;
-  --light-yellow: #f2c64f;
-  --light-green: #57bd82;
-  --pattern-alpha: 0.07;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -164,15 +132,6 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
 }
-.motto {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.motto .sep { color: var(--holly); }
 h1 {
   margin: 0;
   font-family: var(--font-display);
@@ -531,7 +490,6 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
       <g transform="rotate(-6 144 10)"><rect class="socket" x="141.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-red" cx="144" cy="19" rx="4.2" ry="6.2" /></g>
     </svg>
     <h1>Natalimpiadi <span class="dash">–</span> <span class="sub-title">Seconda Edizione<svg class="tree" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l5 7h-3l4 6H6l4-6H7z" /><path d="M12 16v4" /></svg></span></h1>
-    <p class="motto">Citius <span class="sep">·</span> Altius <span class="sep">·</span> Panettonius</p>
   </header>
 
   <section class="hero" aria-labelledby="lead">
