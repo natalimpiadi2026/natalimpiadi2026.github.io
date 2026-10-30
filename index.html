@@ -41,6 +41,9 @@ body { margin: 0; }
   --thread: #a9b8b1;
   --gold: #a87d14;
   --leaf: #2f7d52;
+  --light-blue: #2f6fd0;
+  --light-yellow: #dca21a;
+  --light-green: #2f9e5b;
   --pattern-alpha: 0.06;
   --font-display: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -55,6 +58,9 @@ body { margin: 0; }
     --thread: #43594f;
     --gold: #e2b54a;
     --leaf: #63c08a;
+    --light-blue: #6aa6ec;
+    --light-yellow: #f2c64f;
+    --light-green: #57bd82;
     --pattern-alpha: 0.07;
     color-scheme: dark;
   }
@@ -68,6 +74,9 @@ body { margin: 0; }
   --thread: #43594f;
   --gold: #e2b54a;
   --leaf: #63c08a;
+  --light-blue: #6aa6ec;
+  --light-yellow: #f2c64f;
+  --light-green: #57bd82;
   --pattern-alpha: 0.07;
   color-scheme: dark;
 }
@@ -133,11 +142,37 @@ body {
 /* Testata */
 .masthead {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.9rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
   padding-right: 3.5rem;
 }
+.lights { width: clamp(8.5rem, 22vw, 11rem); height: auto; overflow: visible; }
+.lights .wire { fill: none; stroke: var(--thread); stroke-width: 1.2; }
+.lights .socket { fill: var(--muted); }
+.bulb { animation: twinkle 2.8s ease-in-out infinite; }
+.lights g:nth-of-type(2) .bulb { animation-delay: -0.6s; }
+.lights g:nth-of-type(3) .bulb { animation-delay: -1.3s; }
+.lights g:nth-of-type(4) .bulb { animation-delay: -2s; }
+.lights g:nth-of-type(5) .bulb { animation-delay: -0.9s; }
+.b-blue { fill: var(--light-blue); }
+.b-yellow { fill: var(--light-yellow); }
+.b-ink { fill: var(--ink); }
+.b-green { fill: var(--light-green); }
+.b-red { fill: var(--holly); }
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.motto {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.motto .sep { color: var(--holly); }
 h1 {
   margin: 0;
   font-family: var(--font-display);
@@ -470,7 +505,7 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
 .btn:focus-visible { outline: 2px solid var(--holly); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ornament { animation: none; }
+  .ornament, .bulb { animation: none; }
 }
 </style>
 </head>
@@ -487,7 +522,16 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
   </svg>
 
   <header class="masthead">
+    <svg class="lights" viewBox="0 0 160 30" aria-hidden="true">
+      <path class="wire" d="M0 6 Q16 14 32 6 T64 6 T96 6 T128 6 T160 6" />
+      <g transform="rotate(-8 16 10)"><rect class="socket" x="13.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-blue" cx="16" cy="19" rx="4.2" ry="6.2" /></g>
+      <g transform="rotate(6 48 10)"><rect class="socket" x="45.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-yellow" cx="48" cy="19" rx="4.2" ry="6.2" /></g>
+      <g transform="rotate(-4 80 10)"><rect class="socket" x="77.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-ink" cx="80" cy="19" rx="4.2" ry="6.2" /></g>
+      <g transform="rotate(8 112 10)"><rect class="socket" x="109.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-green" cx="112" cy="19" rx="4.2" ry="6.2" /></g>
+      <g transform="rotate(-6 144 10)"><rect class="socket" x="141.5" y="9" width="5" height="4" rx="1" /><ellipse class="bulb b-red" cx="144" cy="19" rx="4.2" ry="6.2" /></g>
+    </svg>
     <h1>Natalimpiadi <span class="dash">–</span> <span class="sub-title">Seconda Edizione<svg class="tree" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l5 7h-3l4 6H6l4-6H7z" /><path d="M12 16v4" /></svg></span></h1>
+    <p class="motto">Citius <span class="sep">·</span> Altius <span class="sep">·</span> Panettonius</p>
   </header>
 
   <section class="hero" aria-labelledby="lead">
