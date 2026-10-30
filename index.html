@@ -359,6 +359,19 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
   margin-top: 0.5rem;
   line-height: 1.5;
 }
+/* Video dei campioni */
+.clip {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 848 / 480;
+  margin-top: 1rem;
+  border-radius: 12px;
+  background: var(--line);
+  object-fit: cover;
+}
+
 /* Modulo per le risposte */
 .guess,
 .guess-done {
@@ -522,7 +535,9 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
     </div>
     <div class="fact">
       <dt>Campioni in carica <svg class="trophy" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v5a5 5 0 0 1-10 0z" /><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11" /><path d="M17 6h3v1.5A3.5 3.5 0 0 1 16.5 11" /><path d="M12 14v6" /><path d="M8.5 20h7" /></svg></dt>
-      <dd>Gen Z<span class="sub">Hanno battuto i Boomers/Gen X nell'edizione 2024</span></dd>
+      <dd>Gen Z<span class="sub">Hanno battuto i Boomers/Gen X nell'edizione 2024</span>
+        <video class="clip" id="clip" src="campioni-2024.mp4" poster="campioni-2024.jpg" controls playsinline preload="metadata" aria-label="Video della vittoria della Gen Z nel 2024"></video>
+      </dd>
     </div>
     <div class="fact">
       <dt>Squadre 2026</dt>
@@ -682,6 +697,15 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
     $("track-note").textContent = "Il brano ufficiale";
   });
   audio.addEventListener("pause", () => setPlaying(false));
+
+  // Il brano e il video non suonano mai insieme.
+  const clip = $("clip");
+  clip.addEventListener("play", () => {
+    if (!audio.paused) audio.pause();
+  });
+  audio.addEventListener("play", () => {
+    if (!clip.paused) clip.pause();
+  });
   audio.addEventListener("ended", () => setPlaying(false));
   audio.addEventListener("timeupdate", updateTrack);
   audio.addEventListener("loadedmetadata", updateTrack);
