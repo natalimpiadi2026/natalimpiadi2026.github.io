@@ -359,6 +359,84 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
   margin-top: 0.5rem;
   line-height: 1.5;
 }
+/* Modulo per le risposte */
+.guess,
+.guess-done {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.field label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--thread);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.field textarea { resize: vertical; min-height: 5.5rem; }
+.field input::placeholder,
+.field textarea::placeholder { color: var(--muted); opacity: 0.8; }
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--holly);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+.hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  opacity: 0;
+}
+.send {
+  align-self: flex-start;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--holly);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+}
+.send:disabled { opacity: 0.6; cursor: progress; }
+.send:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.guess-status { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.guess-status:empty { display: none; }
+.guess-status.is-error { color: var(--holly); }
+.guess-done-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+.guess-done-text { margin: 0; font-size: 0.95rem; color: var(--muted); overflow-wrap: anywhere; }
 @media (max-width: 40rem) {
   .facts { grid-template-columns: minmax(0, 1fr); }
 }
@@ -448,7 +526,25 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
     </div>
     <div class="fact">
       <dt>Squadre 2026</dt>
-      <dd class="ask">Vuoi provare ad indovinare quali saranno le squadre che si sfideranno in questa nuova edizione?<span class="sub">Scrivimi in privato la tua risposta per provare a far guadagnare un punto alla tua squadra. Il/la primo/a che scrive la risposta corretta guadagna il punto.</span></dd>
+      <dd class="ask">Vuoi provare ad indovinare quali saranno le squadre che si sfideranno in questa nuova edizione?
+        <form class="guess" id="guess" novalidate>
+          <div class="field">
+            <label for="guess-name">Il tuo nome</label>
+            <input id="guess-name" name="name" type="text" autocomplete="given-name" maxlength="60" required>
+          </div>
+          <div class="field">
+            <label for="guess-answer">La tua risposta</label>
+            <textarea id="guess-answer" name="answer" rows="3" maxlength="500" placeholder="Scrivi qui la tua risposta" required></textarea>
+          </div>
+          <input class="hp" name="_honey" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="send" id="guess-send" type="submit">Invia la risposta</button>
+          <p class="guess-status" id="guess-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="guess-done" id="guess-done" hidden>
+          <p class="guess-done-title">Risposta inviata, <span id="guess-done-name"></span>!</p>
+          <p class="guess-done-text">La tua risposta: «<span id="guess-done-answer"></span>»</p>
+        </div>
+      </dd>
     </div>
   </dl>
 
@@ -604,6 +700,80 @@ h1 .sub-title { font-weight: 300; white-space: nowrap; }
       navigator.mediaSession.metadata = new MediaMetadata({ title: "Natalimpiadi", artist: "Natalimpiadi – Seconda Edizione" });
     }
   } catch (e) {}
+
+  // Risposte sulle squadre, inviate per email tramite FormSubmit. Una sola risposta per telefono.
+  const FORM_ENDPOINT = "https://formsubmit.co/ajax/sergio.dimino@live.it";
+  const GUESS_KEY = "natalimpiadi-2026-risposta";
+  const guessForm = $("guess");
+  const guessStatus = $("guess-status");
+  const guessSend = $("guess-send");
+
+  const readGuess = () => {
+    try { return JSON.parse(localStorage.getItem(GUESS_KEY) || "null"); } catch (e) { return null; }
+  };
+  const saveGuess = (g) => {
+    try { localStorage.setItem(GUESS_KEY, JSON.stringify(g)); } catch (e) {}
+  };
+  function showGuessDone(g) {
+    $("guess-done-name").textContent = g.name;
+    $("guess-done-answer").textContent = g.answer;
+    guessForm.hidden = true;
+    $("guess-done").hidden = false;
+  }
+  function showGuessError(text) {
+    guessStatus.textContent = text;
+    guessStatus.classList.add("is-error");
+    guessSend.disabled = false;
+    guessSend.textContent = "Invia la risposta";
+  }
+
+  // #reset-risposta permette all'organizzatore di riaprire il modulo su questo telefono.
+  if (location.hash === "#reset-risposta") {
+    try { localStorage.removeItem(GUESS_KEY); } catch (e) {}
+  }
+  const previousGuess = readGuess();
+  if (previousGuess) showGuessDone(previousGuess);
+
+  guessForm.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const name = guessForm.elements.name.value.trim();
+    const answer = guessForm.elements.answer.value.trim();
+    if (!name || !answer) {
+      showGuessError("Scrivi il tuo nome e la tua risposta.");
+      return;
+    }
+    const sentAt = new Intl.DateTimeFormat("it-IT", { dateStyle: "short", timeStyle: "medium", timeZone: "Europe/Rome" }).format(new Date());
+    guessSend.disabled = true;
+    guessSend.textContent = "Invio in corso…";
+    guessStatus.textContent = "";
+    guessStatus.classList.remove("is-error");
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          Nome: name,
+          Risposta: answer,
+          "Inviata il": sentAt,
+          _subject: "Natalimpiadi: risposta di " + name,
+          _template: "table",
+          _honey: guessForm.elements._honey.value,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && String(data.success) === "true") {
+        const g = { name, answer, at: sentAt };
+        saveGuess(g);
+        showGuessDone(g);
+      } else if (/activat/i.test(data.message || "")) {
+        showGuessError("Il modulo non è ancora attivo: l'organizzatore deve confermarlo dall'email di FormSubmit.");
+      } else {
+        showGuessError("Invio non riuscito. Controlla la connessione e riprova.");
+      }
+    } catch (e) {
+      showGuessError("Invio non riuscito. Controlla la connessione e riprova.");
+    }
+  });
 
   // Tiene lo schermo acceso, utile se la pagina resta sulla TV.
   let lock = null;
